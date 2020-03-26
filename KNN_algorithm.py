@@ -14,7 +14,20 @@ new_features = [5, 7]
 # plt.scatter(new_features[0], new_features[1])
 # plt.show()
 
+
 def k_nearest_neighbors(data, predict, k=3):
     if len(data) >= k:
         warnings.warn('K is set to value less that total voting groups')
-        
+    distances = []
+    for group in data:
+        for features in data[group]:
+            # euclidian_distance = sqrt((features[0]+predict[0])**2 + (features[1]+predict[1])**2)
+            euclidian_distance = np.linalg.norm(np.array(features) - np.array(predict))
+            distances.append([euclidian_distance, group])
+    votes = [i[1] for i in sorted(distances) [:k]]
+    vote_result = Counter(votes).most_common(1)[0][0]
+    return vote_result
+
+
+result = k_nearest_neighbors(dataset, new_features, k=3)
+print(result)
